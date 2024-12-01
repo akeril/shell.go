@@ -21,7 +21,7 @@ func main() {
 			return
 		}
 		args := strings.Fields(prompt)
-		cmd, args := args[0], args[1:]
+		cmd := args[0]
 
 		if f, ok := builtins.Match(cmd); ok {
 			f(args)

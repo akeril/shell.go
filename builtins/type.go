@@ -1,19 +1,24 @@
 package builtins
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/codecrafters-io/shell-starter-go/internal"
 )
 
 func Type(args []string) error {
-	cmd := args[0]
-	if _, ok := Match(cmd); ok {
-		fmt.Printf("%v is a shell builtin\n", cmd)
-	} else if path, ok := internal.MatchExecutable(cmd); ok {
-		fmt.Printf("%v is %v\n", cmd, path)
-	} else {
-		fmt.Printf("%v: not found\n", cmd)
+	if len(args) < 2 {
+		return errors.New("Need at least one argument")
+	}
+	for _, cmd := range args[1:] {
+		if _, ok := Match(cmd); ok {
+			fmt.Printf("%v is a shell builtin\n", cmd)
+		} else if path, ok := internal.MatchExecutable(cmd); ok {
+			fmt.Printf("%v is %v\n", cmd, path)
+		} else {
+			fmt.Printf("%v: not found\n", cmd)
+		}
 	}
 	return nil
 }
