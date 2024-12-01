@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/codecrafters-io/shell-starter-go/builtins"
 )
 
 func main() {
@@ -21,10 +23,11 @@ func main() {
 		args := strings.Fields(prompt)
 		cmd, args := args[0], args[1:]
 
-		if cmd == "exit" {
-			os.Exit(0)
+		if f, ok := builtins.Match(cmd); ok {
+			f(args)
+		} else {
+			fmt.Printf("%v: command not found\n", cmd)
 		}
-		fmt.Printf("%v: command not found\n", cmd)
 	}
 
 }
