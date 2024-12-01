@@ -18,7 +18,7 @@ func main() {
 		// Wait for user input
 		prompt, err := bufio.NewReader(os.Stdin).ReadString('\n')
 		if err != nil {
-			panic("???")
+			return
 		}
 		args := strings.Fields(prompt)
 		cmd, args := args[0], args[1:]
