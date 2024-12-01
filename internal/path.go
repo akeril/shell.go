@@ -24,7 +24,7 @@ func ListExecutables() []string {
 	for _, path := range paths {
 		files, err := os.ReadDir(path)
 		if err != nil {
-			break
+			continue
 		}
 		for _, file := range files {
 			executables = append(executables, filepath.Join(path, file.Name()))
