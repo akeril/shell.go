@@ -14,11 +14,17 @@ func main() {
 		fmt.Fprint(os.Stdout, "$ ")
 
 		// Wait for user input
-		cmd, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		prompt, err := bufio.NewReader(os.Stdin).ReadString('\n')
 		if err != nil {
 			panic("???")
 		}
-		cmd = strings.TrimRight(cmd, "\n")
+		args := strings.Fields(prompt)
+		cmd, args := args[0], args[1:]
+
+		if cmd == "exit" {
+			os.Exit(0)
+		}
 		fmt.Printf("%v: command not found\n", cmd)
 	}
+
 }
