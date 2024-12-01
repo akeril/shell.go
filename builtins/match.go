@@ -6,6 +6,7 @@ func Match(cmd string) (func([]string) error, bool) {
 		"exit": Exit,
 		"type": Type,
 		"pwd":  Pwd,
+		"cd":   Cd,
 	}
 	f, ok := mp[cmd]
 	return f, ok
