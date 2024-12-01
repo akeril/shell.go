@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/builtins"
+	"github.com/codecrafters-io/shell-starter-go/internal"
 )
 
 func main() {
@@ -25,6 +26,8 @@ func main() {
 
 		if f, ok := builtins.Match(cmd); ok {
 			f(args)
+		} else if path, ok := internal.MatchExecutable(cmd); ok {
+			internal.Exec(cmd, path, args)
 		} else {
 			fmt.Printf("%v: command not found\n", cmd)
 		}
