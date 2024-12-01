@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-func MatchExecutable(cmd string) (string, bool) {
-	executables := ListExecutables()
+func MatchCmd(cmd string) (string, bool) {
+	executables := LocateCmd()
 	for _, executable := range executables {
 		if path.Base(executable) == cmd {
 			return executable, true
@@ -17,7 +17,7 @@ func MatchExecutable(cmd string) (string, bool) {
 	return "", false
 }
 
-func ListExecutables() []string {
+func LocateCmd() []string {
 	paths := strings.Split(os.Getenv("PATH"), ":")
 	executables := make([]string, 0)
 

@@ -14,7 +14,7 @@ func Type(args []string) error {
 	for _, cmd := range args[1:] {
 		if _, ok := Match(cmd); ok {
 			fmt.Printf("%v is a shell builtin\n", cmd)
-		} else if path, ok := internal.MatchExecutable(cmd); ok {
+		} else if path, ok := internal.MatchCmd(cmd); ok {
 			fmt.Printf("%v is %v\n", cmd, path)
 		} else {
 			fmt.Printf("%v: not found\n", cmd)

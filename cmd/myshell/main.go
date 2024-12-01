@@ -26,7 +26,7 @@ func main() {
 
 		if f, ok := builtins.Match(cmd); ok {
 			f(args)
-		} else if path, ok := internal.MatchExecutable(cmd); ok {
+		} else if path, ok := internal.MatchCmd(cmd); ok {
 			internal.Exec(cmd, path, args)
 		} else {
 			fmt.Printf("%v: command not found\n", cmd)
