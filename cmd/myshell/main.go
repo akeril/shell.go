@@ -17,5 +17,5 @@ func main() {
 		panic("???")
 	}
 	cmd = strings.TrimRight(cmd, "\n")
-	fmt.Printf("%v: command not found", cmd)
+	fmt.Printf("%v: command not found\n", cmd)
 }
