@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/builtins"
 	"github.com/codecrafters-io/shell-starter-go/internal"
@@ -21,7 +20,7 @@ func main() {
 		if err != nil {
 			return
 		}
-		args := strings.Fields(prompt)
+		args := internal.SplitArgs(prompt)
 		cmd := args[0]
 
 		if f, ok := builtins.Match(cmd); ok {
