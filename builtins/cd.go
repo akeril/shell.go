@@ -4,12 +4,16 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func Cd(args []string) error {
 	path := args[1]
 	if len(args) != 2 {
 		return errors.New("Incorrect number of parameters")
+	}
+	if path[0] == '~' {
+		path = strings.Replace(path, "~", os.Getenv("HOME"), 1)
 	}
 	err := os.Chdir(path)
 	if err != nil {
