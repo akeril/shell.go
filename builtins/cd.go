@@ -16,6 +16,11 @@ func Cd(args []string) error {
 		fmt.Printf("cd: %v: No such file or directory\n", path)
 		return err
 	}
-	err = os.Setenv("PWD", path)
+	dir, err := os.Getwd()
+	if err != nil {
+		fmt.Printf("cd: %v: No such file or directory\n", path)
+		return err
+	}
+	err = os.Setenv("PWD", dir)
 	return err
 }
