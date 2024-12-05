@@ -4,34 +4,32 @@ import (
 	"strings"
 )
 
-/*
-what the funck
-*/
 func SplitArgs(s string) []string {
 	var args []string
 	s = strings.Trim(s, "\r\n")
 	buf := ""
-	isQuoted := false
+	isSingleQuoted := false
+	isDoubleQuoted := false
 	for _, c := range s {
-		if c == ' ' {
-			if isQuoted {
-				buf += string(c)
-			} else if buf != "" {
-				args = append(args, buf)
-				buf = ""
-			}
-		} else if c == '\'' {
-			isQuoted = !isQuoted
-			if buf != "" {
-				args = append(args, buf)
-				buf = ""
-			}
+		if c == '\'' && !isDoubleQuoted {
+			isSingleQuoted = !isSingleQuoted
+			appendArg(&args, &buf)
+		} else if c == '"' && !isSingleQuoted {
+			isDoubleQuoted = !isDoubleQuoted
+			appendArg(&args, &buf)
+		} else if c == ' ' && !isSingleQuoted && !isDoubleQuoted {
+			appendArg(&args, &buf)
 		} else {
 			buf += string(c)
 		}
 	}
-	if buf != "" {
-		args = append(args, buf)
-	}
+	appendArg(&args, &buf)
 	return args
+}
+
+func appendArg(args *[]string, buf *string) {
+	if *buf != "" {
+		*args = append(*args, *buf)
+	}
+	*buf = ""
 }
