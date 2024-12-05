@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/codecrafters-io/shell-starter-go/builtins"
-	"github.com/codecrafters-io/shell-starter-go/internal"
+	"github.com/kjabin/shell.go/builtins"
+	"github.com/kjabin/shell.go/internal"
 )
 
 func main() {

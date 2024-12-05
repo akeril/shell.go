@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/codecrafters-io/shell-starter-go/internal"
+	"github.com/kjabin/shell.go/internal"
 )
 
 func Type(args []string) error {
