@@ -10,8 +10,12 @@ func SplitArgs(s string) []string {
 	buf := ""
 	isSingleQuoted := false
 	isDoubleQuoted := false
-	for _, c := range s {
-		if c == '\'' && !isDoubleQuoted {
+	for i := 0; i < len(s); i++ {
+		c := s[i]
+		if c == '\\' && !isSingleQuoted && !isDoubleQuoted {
+			i++
+			buf += string(s[i])
+		} else if c == '\'' && !isDoubleQuoted {
 			isSingleQuoted = !isSingleQuoted
 			appendArg(&args, &buf)
 		} else if c == '"' && !isSingleQuoted {
