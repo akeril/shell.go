@@ -1,7 +1,11 @@
 package builtins
 
-func Match(cmd string) (func([]string) error, bool) {
-	mp := map[string]func([]string) error{
+import "os"
+
+type Command func(*os.File, *os.File, []string)
+
+func Match(cmd string) (Command, bool) {
+	mp := map[string]Command{
 		"echo": Echo,
 		"exit": Exit,
 		"type": Type,

@@ -24,7 +24,7 @@ func main() {
 		cmd := args[0]
 
 		if f, ok := builtins.Match(cmd); ok {
-			f(args)
+			f(os.Stdout, os.Stderr, args)
 		} else if path, ok := internal.MatchCmd(cmd); ok {
 			internal.Exec(cmd, path, args)
 		} else {

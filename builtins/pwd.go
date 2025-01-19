@@ -5,7 +5,6 @@ import (
 	"os"
 )
 
-func Pwd(args []string) error {
-	fmt.Println(os.Getenv("PWD"))
-	return nil
+func Pwd(fdout, fderr *os.File, args []string) {
+	fmt.Fprintf(fdout, "%s", os.Getenv("PWD"))
 }

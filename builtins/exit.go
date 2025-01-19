@@ -2,7 +2,6 @@ package builtins
 
 import "os"
 
-func Exit(args []string) error {
+func Exit(fdout, fderr *os.File, args []string) {
 	os.Exit(0)
-	return nil
 }

@@ -1,24 +1,24 @@
 package builtins
 
 import (
-	"errors"
 	"fmt"
+	"os"
 
 	"github.com/kjabin/shell.go/internal"
 )
 
-func Type(args []string) error {
+func Type(fdout, fderr *os.File, args []string) {
 	if len(args) < 2 {
-		return errors.New("Need at least one argument")
+		fmt.Fprintf(fderr, "Need at least one argument")
+		return
 	}
 	for _, cmd := range args[1:] {
 		if _, ok := Match(cmd); ok {
-			fmt.Printf("%v is a shell builtin\n", cmd)
+			fmt.Fprintf(fdout, "%v is a shell builtin\n", cmd)
 		} else if path, ok := internal.MatchCmd(cmd); ok {
-			fmt.Printf("%v is %v\n", cmd, path)
+			fmt.Fprintf(fdout, "%v is %v\n", cmd, path)
 		} else {
-			fmt.Printf("%v: not found\n", cmd)
+			fmt.Fprintf(fderr, "%v: not found\n", cmd)
 		}
 	}
-	return nil
 }

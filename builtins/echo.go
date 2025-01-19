@@ -1,12 +1,14 @@
 package builtins
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
-func Echo(args []string) error {
+func Echo(fdout, fderr *os.File, args []string) {
 	n := len(args)
 	for _, arg := range args[1 : n-1] {
-		fmt.Printf("%v ", arg)
+		fmt.Fprintf(fdout, "%v ", arg)
 	}
-	fmt.Println(args[n-1])
-	return nil
+	fmt.Fprintf(fdout, "%s\n", args[n-1])
 }
