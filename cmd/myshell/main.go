@@ -1,12 +1,13 @@
 package main
 
 import (
-	"bufio"
+	"errors"
 	"fmt"
 	"os"
 
 	"github.com/kjabin/shell.go/builtins"
 	"github.com/kjabin/shell.go/internal"
+	"golang.org/x/term"
 )
 
 func main() {
@@ -16,9 +17,9 @@ func main() {
 		fmt.Fprint(os.Stdout, "$ ")
 
 		// Wait for user input
-		prompt, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		prompt, err := ReadPrompt()
 		if err != nil {
-			return
+			continue
 		}
 		args := internal.SplitArgs(prompt)
 		cmd := args[0]
@@ -43,5 +44,40 @@ func main() {
 			fmt.Fprintf(os.Stderr, "%v: command not found\n", cmd)
 		}
 	}
+}
 
+func ReadPrompt() (string, error) {
+	prompt := ""
+	state, err := term.MakeRaw(int(os.Stdin.Fd()))
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	c := make([]byte, 1)
+loop:
+	for {
+		os.Stdin.Read(c)
+
+		switch c[0] {
+		case 3:
+			fmt.Fprintf(os.Stdout, "^C")
+			err = errors.New("Input terminated")
+			break loop
+		case 10, 13:
+			break loop
+		case 127:
+			if len(prompt) > 0 {
+				fmt.Fprintf(os.Stdout, "\b \b")
+				prompt = prompt[:len(prompt)-1]
+			}
+		default:
+			fmt.Fprintf(os.Stdout, "%c", c[0])
+			prompt += string(c[0])
+		}
+	}
+
+	term.Restore(int(os.Stdin.Fd()), state)
+	fmt.Fprintf(os.Stdout, "\n")
+	return prompt, err
 }
