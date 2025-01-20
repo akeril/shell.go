@@ -35,8 +35,6 @@ func main() {
 			continue
 		}
 
-		fmt.Println(args, fout, ferr)
-
 		if f, ok := builtins.Match(cmd); ok {
 			f(fout, ferr, args)
 		} else if path, ok := internal.MatchCmd(cmd); ok {
