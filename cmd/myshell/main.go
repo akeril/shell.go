@@ -103,8 +103,7 @@ loop:
 func Autocomplete(engine *internal.Trie, prompt string, doubletab bool) (string, string, error) {
 	matches := engine.Match(prompt)
 	if len(matches) == 1 {
-		prompt += matches[0]
-		return prompt + matches[0], matches[0], nil
+		return prompt + matches[0] + " ", matches[0] + " ", nil
 	}
 	if len(matches) == 0 || !doubletab {
 		return prompt, "\a", nil
