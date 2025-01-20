@@ -19,13 +19,17 @@ func main() {
 	}
 
 	// infinite repl
+	prefix := ""
 	for {
-		fmt.Fprint(os.Stdout, "$ ")
+		fmt.Fprintf(os.Stdout, "$ %s", prefix)
 
 		// Wait for user input
-		prompt, err := ReadPrompt(trie)
+		prompt, err := ReadPrompt(trie, prefix)
 		if err != nil {
+			prefix = prompt
 			continue
+		} else {
+			prefix = ""
 		}
 		args := internal.SplitArgs(prompt)
 		cmd := args[0]
@@ -52,8 +56,7 @@ func main() {
 	}
 }
 
-func ReadPrompt(engine *internal.Trie) (string, error) {
-	prompt := ""
+func ReadPrompt(engine *internal.Trie, prompt string) (string, error) {
 	state, err := term.MakeRaw(int(os.Stdin.Fd()))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -62,12 +65,14 @@ func ReadPrompt(engine *internal.Trie) (string, error) {
 
 	doubletab := false
 	c := make([]byte, 1)
+
 loop:
 	for {
 		os.Stdin.Read(c)
 		switch c[0] {
 		case 3:
 			fmt.Fprintf(os.Stdout, "^C")
+			prompt = ""
 			err = errors.New("Input terminated")
 			break loop
 		case 9:
@@ -91,7 +96,7 @@ loop:
 			}
 		}
 		if c[0] == 9 {
-			doubletab = true
+			doubletab = !doubletab
 		}
 	}
 
