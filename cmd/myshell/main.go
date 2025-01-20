@@ -12,12 +12,18 @@ import (
 
 func main() {
 
+	cmds := append(builtins.Builtins(), internal.LocateCmdNames()...)
+	trie := internal.NewTrie()
+	for _, cmd := range cmds {
+		trie.Insert(cmd)
+	}
+
 	// infinite repl
 	for {
 		fmt.Fprint(os.Stdout, "$ ")
 
 		// Wait for user input
-		prompt, err := ReadPrompt()
+		prompt, err := ReadPrompt(trie)
 		if err != nil {
 			continue
 		}
@@ -46,7 +52,7 @@ func main() {
 	}
 }
 
-func ReadPrompt() (string, error) {
+func ReadPrompt(engine *internal.Trie) (string, error) {
 	prompt := ""
 	state, err := term.MakeRaw(int(os.Stdin.Fd()))
 	if err != nil {
@@ -54,16 +60,23 @@ func ReadPrompt() (string, error) {
 		os.Exit(1)
 	}
 
+	doubletab := false
 	c := make([]byte, 1)
 loop:
 	for {
 		os.Stdin.Read(c)
-
 		switch c[0] {
 		case 3:
 			fmt.Fprintf(os.Stdout, "^C")
 			err = errors.New("Input terminated")
 			break loop
+		case 9:
+			msg := ""
+			prompt, msg, err = Autocomplete(engine, prompt, doubletab)
+			fmt.Fprintf(os.Stdout, "%s", msg)
+			if err != nil {
+				break loop
+			}
 		case 10, 13:
 			break loop
 		case 127:
@@ -72,12 +85,33 @@ loop:
 				prompt = prompt[:len(prompt)-1]
 			}
 		default:
-			fmt.Fprintf(os.Stdout, "%c", c[0])
-			prompt += string(c[0])
+			if c[0] >= 32 {
+				fmt.Fprintf(os.Stdout, "%c", c[0])
+				prompt += string(c[0])
+			}
+		}
+		if c[0] == 9 {
+			doubletab = true
 		}
 	}
 
 	term.Restore(int(os.Stdin.Fd()), state)
 	fmt.Fprintf(os.Stdout, "\n")
 	return prompt, err
+}
+
+func Autocomplete(engine *internal.Trie, prompt string, doubletab bool) (string, string, error) {
+	matches := engine.Match(prompt)
+	if len(matches) == 1 {
+		prompt += matches[0]
+		return prompt + matches[0], matches[0], nil
+	}
+	if len(matches) == 0 || !doubletab {
+		return prompt, "\a", nil
+	}
+	s := "\r\n"
+	for _, match := range matches {
+		s += prompt + match + " "
+	}
+	return prompt, s, errors.New("Input terminated by autocomplete")
 }

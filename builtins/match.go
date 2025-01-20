@@ -15,3 +15,7 @@ func Match(cmd string) (Command, bool) {
 	f, ok := mp[cmd]
 	return f, ok
 }
+
+func Builtins() []string {
+	return []string{"echo", "exit", "type", "pwd", "cd"}
+}

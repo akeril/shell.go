@@ -33,3 +33,20 @@ func LocateCmd() []string {
 
 	return executables
 }
+
+func LocateCmdNames() []string {
+	paths := strings.Split(os.Getenv("PATH"), ":")
+	executables := make([]string, 0)
+
+	for _, path := range paths {
+		files, err := os.ReadDir(path)
+		if err != nil {
+			continue
+		}
+		for _, file := range files {
+			executables = append(executables, file.Name())
+		}
+	}
+
+	return executables
+}
