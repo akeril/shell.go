@@ -110,7 +110,7 @@ func Autocomplete(engine *internal.Trie, prompt string, doubletab bool) (string,
 	}
 	s := "\r\n"
 	for _, match := range matches {
-		s += prompt + match + " "
+		s += prompt + match + "  "
 	}
 	return prompt, s, errors.New("Input terminated by autocomplete")
 }
