@@ -6,7 +6,6 @@ import (
 )
 
 func Exec(fdout, fderr *os.File, cmd string, path string, args []string) error {
-	args[0] = path
 	pid, err := syscall.ForkExec(path, args, &syscall.ProcAttr{
 		Env: os.Environ(),
 		Files: []uintptr{
