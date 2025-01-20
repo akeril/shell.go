@@ -23,12 +23,26 @@ func main() {
 		args := internal.SplitArgs(prompt)
 		cmd := args[0]
 
+		args, fout, err := internal.RedirectStream(args, []string{">", "1>", "1>>", ">>"})
+		if err != nil {
+			fmt.Printf("%s: %s\n", cmd, err)
+			continue
+		}
+
+		args, ferr, err := internal.RedirectStream(args, []string{"2>", "2>>"})
+		if err != nil {
+			fmt.Printf("%s: %s\n", cmd, err)
+			continue
+		}
+
+		fmt.Println(args, fout, ferr)
+
 		if f, ok := builtins.Match(cmd); ok {
-			f(os.Stdout, os.Stderr, args)
+			f(fout, ferr, args)
 		} else if path, ok := internal.MatchCmd(cmd); ok {
-			internal.Exec(cmd, path, args)
+			internal.Exec(fout, ferr, cmd, path, args)
 		} else {
-			fmt.Printf("%v: command not found\n", cmd)
+			fmt.Fprintf(os.Stderr, "%v: command not found\n", cmd)
 		}
 	}
 
