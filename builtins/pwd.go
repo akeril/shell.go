@@ -6,5 +6,5 @@ import (
 )
 
 func Pwd(fdout, fderr *os.File, args []string) {
-	fmt.Fprintf(fdout, "%s", os.Getenv("PWD"))
+	fmt.Fprintf(fdout, "%s\n", os.Getenv("PWD"))
 }
