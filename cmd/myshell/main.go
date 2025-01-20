@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"slices"
 
 	"github.com/kjabin/shell.go/builtins"
 	"github.com/kjabin/shell.go/internal"
@@ -113,6 +114,7 @@ func Autocomplete(engine *internal.Trie, prompt string, doubletab bool) (string,
 	if len(matches) == 0 || !doubletab {
 		return prompt, "\a", nil
 	}
+	slices.Sort(matches)
 	s := "\r\n"
 	for _, match := range matches {
 		s += prompt + match + "  "
