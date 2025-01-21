@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kjabin/shell.go/internal"
+	"github.com/akeril/shell.go/internal"
 )
 
 func Type(fdout, fderr *os.File, args []string) {

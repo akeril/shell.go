@@ -6,7 +6,7 @@
 //
 // DON'T EDIT THIS!
 
-module github.com/kjabin/shell.go
+module github.com/akeril/shell.go
 
 go 1.22
 

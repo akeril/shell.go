@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kjabin/shell.go/builtins"
-	"github.com/kjabin/shell.go/internal"
+	"github.com/akeril/shell.go/builtins"
+	"github.com/akeril/shell.go/internal"
 )
 
 func main() {
