@@ -53,3 +53,30 @@ func (t *Trie) dfs(prefix string) []string {
 
 	return res
 }
+
+func (t *Trie) LongestMatch(s string) (string, bool) {
+	for _, c := range s {
+		if _, ok := t.children[c]; !ok {
+			return "", false
+		}
+		t = t.children[c]
+	}
+	if len(t.children) != 1 {
+		return "", false
+	}
+	prefix := ""
+	for !t.valid && len(t.children) == 1 {
+		c := Keys(t.children)[0]
+		prefix += string(c)
+		t = t.children[c]
+	}
+	return prefix, true
+}
+
+func Keys[K comparable, V any](m map[K]V) []K {
+	keys := make([]K, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	return keys
+}

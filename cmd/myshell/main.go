@@ -111,6 +111,9 @@ func Autocomplete(engine *internal.Trie, prompt string, doubletab bool) (string,
 	if len(matches) == 1 {
 		return prompt + matches[0] + " ", matches[0] + " ", nil
 	}
+	if match, ok := engine.LongestMatch(prompt); ok {
+		return prompt + match, match, nil
+	}
 	if len(matches) == 0 || !doubletab {
 		return prompt, "\a", nil
 	}
